@@ -1,5 +1,6 @@
 package dev.donmanuel.app.splitbill.views
 
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -12,6 +13,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -49,8 +52,16 @@ fun ContentHomeView(modifier: Modifier) {
     var totalTip by remember { mutableStateOf(0.0) }
     var total by remember { mutableStateOf(0.0) }
     var totalByPersons by remember { mutableStateOf(0.0) }
+    val focusManager = LocalFocusManager.current
 
-    Column(modifier) {
+    Column(
+        modifier
+            .pointerInput(Unit) {
+                detectTapGestures {
+                    focusManager.clearFocus()
+                }
+            }
+    ) {
         MainCard(title = "Total Bill Amount") {
             OutlinedTextField(
                 value = amount,
@@ -114,6 +125,7 @@ fun ContentHomeView(modifier: Modifier) {
                             person = numberPersons,
                         )
                     }
+                    focusManager.clearFocus()
                 },
                 modifier = Modifier
                     .padding(top = 16.dp)
